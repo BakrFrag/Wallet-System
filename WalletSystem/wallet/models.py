@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.fields import FloatField
 from django.core.validators import RegexValidator;
-from .db_validators import *
+from .validators import *
 # Create your models here.
 class Wallet(models.Model):
     """

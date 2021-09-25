@@ -4,17 +4,10 @@ from wallet.exceptions import WalletExist;
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Wallet;
 from .exceptions import *;
+from .helpers import getWallet;
 phone_number_pattern=re.compile(r"(\+2)?([0-9]{11})$")
 wallet_password_pattern=re.compile(r"([0-9]{6})$");
-def getWallet(phone_number):
-    """
-    helper function check if wallet with phone number exists or not
-    """
-    try:
-        Wallet.objects.get(phone=phone_number);
-        return True;
-    except ObjectDoesNotExist:
-        return False;
+
 def checkWalletExistance(exist):
         """
         check wallet exists or not according to passed parameter to decorator
