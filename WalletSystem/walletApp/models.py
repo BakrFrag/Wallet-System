@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.fields import FloatField
 from django.core.validators import RegexValidator;
 from .validators import *
 # Create your models here.

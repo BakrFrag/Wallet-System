@@ -5,14 +5,13 @@ from rest_framework import status
 from rest_framework.serializers import Serializer
 from .models import Wallet;
 from .serializers import *;
-from .validators import *;
-class WalletViewset(viewsets):
+from .decorators import *;
+class WalletViewset(viewsets.ModelViewSet):
     """
     include wallet operation like create , activate , credit and debit
     """
     @action(methods=["POST"],detail=True)
-    @WalletNotExist(True)
-    def create_wallet(self,request,*args,**kwargs):
+    def create_wallet(self,request):
         """
         responsible for creating wallet
         """

@@ -1,12 +1,10 @@
 import re;
 from functools import wraps
 from wallet.exceptions import WalletExist;
-from django.core.exceptions import ObjectDoesNotExist
-from .models import Wallet;
+
 from .exceptions import *;
 from .helpers import getWallet;
-phone_number_pattern=re.compile(r"(\+2)?([0-9]{11})$")
-wallet_password_pattern=re.compile(r"([0-9]{6})$");
+
 
 def checkWalletExistance(exist):
         """
