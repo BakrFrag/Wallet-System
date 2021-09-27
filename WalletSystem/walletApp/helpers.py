@@ -7,5 +7,5 @@ def getWallet(phone_number):
     try:
         Wallet.objects.get(phone=phone_number);
         return True;
-    except Wallet.ObjectDoesNotExist:
+    except Wallet.DoesNotExist as E:
         return False;

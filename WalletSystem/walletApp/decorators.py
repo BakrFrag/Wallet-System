@@ -1,7 +1,7 @@
 import re;
 from functools import wraps
-from wallet.exceptions import WalletExist;
-
+from .exceptions import WalletExist;
+from .helpers import getWallet;
 from .exceptions import *;
 from .helpers import getWallet;
 
@@ -13,11 +13,17 @@ def checkWalletExistance(exist):
         def checkWallet(func):
             @wraps(func)
             def wrapper(*args,**kwargs):
-                number=kwargs.get("number");
-                found=getWallet(number);
+                print("kwargs:",kwargs);
+                data=args[1].data;
+                phone=data.get("phone");
+                found=getWallet(phone);
+                print("phone:",phone);
+                print("found:",found)
                 if found==True and exist==False:
                     raise WalletExist;
                 elif found==False and exist==True:
-                    raise WalletNotExist;
-                
+                     raise WalletNotExist;
+                return func(*args,**kwargs);
+            return wrapper;
+        return checkWallet;
                 

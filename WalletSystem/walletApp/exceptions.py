@@ -1,4 +1,10 @@
 from rest_framework.exceptions import APIException 
+class InternalServerError(APIException):
+    """
+    raised when internal server error happen
+    """
+    status_code=500;
+    default_detail="internal server error"
 class WalletExist(APIException):
     """
     raised when creating wallet while wallet already exist
