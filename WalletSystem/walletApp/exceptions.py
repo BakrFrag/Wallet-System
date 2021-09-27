@@ -36,5 +36,4 @@ class PhoneNumberValidationError(APIException):
     raise when invalid phone number format
     """
     status_code=400;
-    default_detail="invalid phone number format , phone number mst be 11 number and may be start with +20";
-    
+    default_detail="invalid phone number format , phone number mst be 11 number and must start with 01";
