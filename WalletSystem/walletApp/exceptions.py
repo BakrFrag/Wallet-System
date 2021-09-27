@@ -56,3 +56,10 @@ class CreditWalletException(APIException):
     """
     status_code=400;
     default_detail="wallet credit amount must be greater than 0";
+
+class DebitWalletException(APIException):
+    """
+    raised whn debit amount > wallet balance
+    """
+    status_code=400;
+    default_detail="wallet debit amount must be less than wallet balance";
