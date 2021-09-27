@@ -44,6 +44,7 @@ class WalletViewset(viewsets.ModelViewSet):
     @checkPhoneNumberFormat
     @checkWalletPasswordFormat
     @checkWalletPassword
+    @checkWalletActivation(False)
     def activateWallet(self,request):
         """
         viewsets function to activate wallet
@@ -60,3 +61,24 @@ class WalletViewset(viewsets.ModelViewSet):
         except Exception as E:
             print(sys.exc_info())
             raise InternalServerError;
+    @action(methods=["GET"],detail=True)
+    @checkWalletExistance(True)
+    @checkPhoneNumberFormat
+    @checkWalletPasswordFormat
+    @checkWalletPassword
+    @checkWalletActivation(True)
+    def getWalletBalance(self,request):
+        """
+        get wallet password
+        """
+        try:
+             serializer=CoreWalletSerializer(data=request.data);
+             serializer.is_valid(raise_exception=True);
+             instance=getWallet(serializer.data.get("phone")).wallet;
+             return Response({"phone":instance.phone,"balance":instance.balance},status=status.HTTP_200_OK);
+        except ValidationError as E:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        except Exception as E:
+            print(sys.exc_info())
+            raise InternalServerError;
+            

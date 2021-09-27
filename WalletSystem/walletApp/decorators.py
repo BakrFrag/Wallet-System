@@ -67,3 +67,19 @@ def checkWalletPassword(func):
             return func(*args,**kwargs);
         raise WalletPasswordError;
     return wrapper;
+
+def checkWalletActivation(status):
+    """
+    decorator to check if walet is activated or not
+    """
+    def checkActivation(func):
+        def wrapper(*args,**kwargs):
+            phone=args[1].data.get("phone");
+            wallet=getWallet(phone).wallet;
+            if wallet.is_active and status==False:
+                raise WalletAlreadyActivated;
+            elif wallet.is_acive==False and status==True:
+                raise WalletNotActivated
+            return func(*args,**kwargs);
+        return wrapper;
+    return checkActivation; 
