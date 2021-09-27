@@ -17,7 +17,7 @@ def checkWalletExistance(exist):
                 print("kwargs:",kwargs);
                 data=args[1].data;
                 phone=data.get("phone");
-                found=getWallet(phone);
+                found=getWallet(phone).get("exists");
                 print("phone:",phone);
                 print("found:",found)
                 if found==True and exist==False:
@@ -56,8 +56,14 @@ def checkWalletPassword(func):
     """
     def wrapper(*args,**kwargs):
         phone=args[1].data.get("phone");
-        wallet=getWallet(phone=phone);
-        password=args[1].data.get("password");
-        if check_password(password,wallet.password):
+        wallet=getWallet(phone);
+        print("function result:",wallet)
+        parsed_password=args[1].data.get("password");
+        wallet_password=wallet.get("wallet").password;
+        print("parsed:",parsed_password);
+        print("already:",wallet_password)
+        print(check_password(parsed_password,wallet_password))
+        if check_password(parsed_password,wallet_password):
             return func(*args,**kwargs);
         raise WalletPasswordError;
+    return wrapper;

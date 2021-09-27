@@ -9,7 +9,7 @@ class CoreWalletSerializer(serializers.ModelSerializer):
         model=Wallet;
                  # phone
         fields=["phone","password","balance"]
-        read_only_fields = ["balance"]
+        read_only_fields = ["balance","is_active"]
 class WalletOperationSerializer(serializers.ModelSerializer):
     """
     for debit and credit wallet
