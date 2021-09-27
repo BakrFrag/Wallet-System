@@ -27,3 +27,13 @@ def checkWalletExistance(exist):
             return wrapper;
         return checkWallet;
                 
+def checkPhoneNumber(func):
+    """
+    add decorator to check phone validation
+    """
+    def wrapper(*args,**kwags):
+        phone=args[1].data.get("phone");
+        if re.match(phone_number_pattern,phone):
+            return func(*args,**kwargs);
+        raise PhoneNumberValidationError;
+    return wrapper;

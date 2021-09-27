@@ -30,3 +30,11 @@ class WalletAlreadyActivated(APIException):
     """
     status_code=400;
     default_detail="wallet Already Activated";
+
+class PhoneNumberValidationError(APIException):
+    """
+    raise when invalid phone number format
+    """
+    status_code=400;
+    default_detail="invalid phone number format , phone number mst be 11 number and may be start with +20";
+    
