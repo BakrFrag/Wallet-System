@@ -81,4 +81,32 @@ class WalletViewset(viewsets.ModelViewSet):
         except Exception as E:
             print(sys.exc_info())
             raise InternalServerError;
+
+    @action(methods=["PUT"],detail=True)
+    @checkWalletExistance(True)
+    @checkPhoneNumberFormat
+    @checkWalletPasswordFormat
+    @checkWalletPassword
+    @checkWalletActivation(True)
+    def creditWalletBalance(self,request):
+        """
+        to credit wallet balance 
+        """
+        try:
+            serializer=WalletOperationSerializer(data=request.data);
+            serializer.is_valid(raise_exception=True);
+            amount=serializer.validated_data.get("amount")
+            if amount <=0:
+                raise CreditWalletException;
+            phone=serializer.validated_data.get("phone");
+            instance=getWallet(phone);
+            serializer.update({
+                "balance":instance.balance + serializer.validated_data.get("amount ")},instance=instance);
+            return Response({"phone":phone,"balance":serializer.data.get("balance")},status=status.HTTP_200_OK)
+        except ValidationError as E:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        except Exception as E:
+            print(sys.exc_info())
+            raise InternalServerError;
+    
             

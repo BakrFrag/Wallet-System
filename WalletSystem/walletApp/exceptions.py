@@ -50,3 +50,9 @@ class WalletPasswordError(APIException):
     """
     status_code=400;
     default_detail="error wallet password"
+class CreditWalletException(APIException):
+    """
+    raised when cedit wallet with amout <= 0
+    """
+    status_code=400;
+    default_detail="wallet credit amount must be greater than 0";
