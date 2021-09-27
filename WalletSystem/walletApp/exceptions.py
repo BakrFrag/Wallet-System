@@ -43,3 +43,10 @@ class WalletPasswordVlidationError(APIException):
     """
     status_code=400;
     default_detail="invalid wallet password , wallet password mut be 6 numbers only";
+
+class WalletPasswordError(APIException):
+    """
+    raise when parsed wallet password
+    """
+    status_code=400;
+    default_detail="error wallet password"

@@ -1,5 +1,6 @@
 import re;
 from functools import wraps
+from django.contrib.auth.hashers import check_password;
 from .exceptions import WalletExist;
 from .helpers import getWallet;
 from .exceptions import *;
@@ -48,3 +49,15 @@ def checkWalletPasswordFormat(func):
             return func(*args,**kwargs);
         raise WalletPasswordVlidationError
     return wrapper;
+
+def checkWalletPassword(func):
+    """
+    decorator to check if wallet password correct
+    """
+    def wrapper(*args,**kwargs):
+        phone=args[1].data.get("phone");
+        wallet=getWallet(phone=phone);
+        password=args[1].data.get("password");
+        if check_password(password,wallet.password):
+            return func(*args,**kwargs);
+        raise WalletPasswordError;
