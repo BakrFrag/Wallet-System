@@ -37,3 +37,14 @@ def checkPhoneNumber(func):
             return func(*args,**kwargs);
         raise PhoneNumberValidationError;
     return wrapper;
+
+def checkWalletPassword(func):
+    """
+    decorator to check wallet password must be 6 numbers only
+    """
+    def wrapper(*args,**kwargs):
+        password=args[1].data.get("password");
+        if re.match(wallet_password_pattern,password):
+            return func(*args,**kwargs);
+        raise WalletPasswordVlidationError
+    return wrapper;

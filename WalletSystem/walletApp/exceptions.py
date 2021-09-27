@@ -37,3 +37,9 @@ class PhoneNumberValidationError(APIException):
     """
     status_code=400;
     default_detail="invalid phone number format , phone number mst be 11 number and must start with 01";
+class WalletPasswordVlidationError(APIException):
+    """
+    raise when invalid wallet password number
+    """
+    status_code=400;
+    default_detail="invalid wallet password , wallet password mut be 6 numbers only";

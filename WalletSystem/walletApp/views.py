@@ -17,6 +17,7 @@ class WalletViewset(viewsets.ModelViewSet):
     @action(methods=["POST"],detail=True)
     @checkWalletExistance(False)
     @checkPhoneNumber
+    @checkWalletPassword
     def create_wallet(self,request):
         """
         responsible for creating wallet
