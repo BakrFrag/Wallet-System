@@ -17,8 +17,8 @@ class WalletViewset(viewsets.ModelViewSet):
     serializer_class=CoreWalletSerializer;
     @action(methods=["POST"],detail=True)
     @checkWalletExistance(False)
-    @checkPhoneNumber
-    @checkWalletPassword
+    @checkPhoneNumberFormat
+    @checkWalletPasswordFormat
     def create_wallet(self,request):
         """
         responsible for creating wallet

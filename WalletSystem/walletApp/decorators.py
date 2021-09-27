@@ -27,7 +27,7 @@ def checkWalletExistance(exist):
             return wrapper;
         return checkWallet;
                 
-def checkPhoneNumber(func):
+def checkPhoneNumberFormat(func):
     """
     add decorator to check phone validation
     """
@@ -38,7 +38,7 @@ def checkPhoneNumber(func):
         raise PhoneNumberValidationError;
     return wrapper;
 
-def checkWalletPassword(func):
+def checkWalletPasswordFormat(func):
     """
     decorator to check wallet password must be 6 numbers only
     """
