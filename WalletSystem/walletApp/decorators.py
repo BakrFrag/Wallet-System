@@ -4,7 +4,7 @@ from .exceptions import WalletExist;
 from .helpers import getWallet;
 from .exceptions import *;
 from .helpers import getWallet;
-
+from .validators import *;
 
 def checkWalletExistance(exist):
         """
@@ -31,7 +31,7 @@ def checkPhoneNumber(func):
     """
     add decorator to check phone validation
     """
-    def wrapper(*args,**kwags):
+    def wrapper(*args,**kwargs):
         phone=args[1].data.get("phone");
         if re.match(phone_number_pattern,phone):
             return func(*args,**kwargs);
