@@ -65,19 +65,19 @@ class WalletViewset(viewsets.ModelViewSet):
     @checkWalletExistance(True)
     @checkWalletPassword
     @checkWalletActivation(True)
-    def getWalletBalance(self,request):
+    def getWalletInfo(self,request):
         """
-        get wallet password
+        get wallet properties
         """
         try:
-             print("1")
+             required_field=request.GET.get("q");
              serializer=CoreWalletSerializer(data=request.data);
-             print("2")
              serializer.is_valid(raise_exception=True);
-             print("3");
              instance=getWallet(serializer.data.get("phone")).get("wallet");
-             print("4")
-             return Response({"phone":instance.phone,"balance":instance.balance},status=status.HTTP_200_OK);
+             if hasattr(instance,required_field):
+                 return Response({"phone":instance.phone,required_field:getattr(instance,required_field)},status=status.HTTP_200_OK);
+             raise UnknownPropertyError
+             
         except ValidationError as E:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         except Exception as E:

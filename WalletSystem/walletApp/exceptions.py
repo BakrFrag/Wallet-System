@@ -63,3 +63,10 @@ class DebitWalletException(APIException):
     """
     status_code=400;
     default_detail="wallet debit amount must be less than wallet balance";
+
+class UnknownPropertyError(APIException):
+    """
+    raised when required property not attribute of wallet
+    """
+    status_code=400;
+    default_detail="unkown property of wallet";

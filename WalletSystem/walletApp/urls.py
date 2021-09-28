@@ -7,19 +7,19 @@ create_wallet=WalletViewset.as_view({
 activate_wallet=WalletViewset.as_view({
     "post":"activateWallet"
 });
-get_wallet_balance=WalletViewset.as_view({
-    "get":"getWalletBalance"
+get_wallet_property=WalletViewset.as_view({
+    "get":"getWalletInfo"
 });
 debit_wallet=WalletViewset.as_view({
     "put":"debitWalletBalance"
 });
 credit_wallet=WalletViewset.as_view({
-    "put":"creditWalleBalance"
+    "put":"creditWalletInfo"
 });
 urlpatterns = format_suffix_patterns([
         path("create/",create_wallet,name="create_wallet"),
         path("activate/",activate_wallet,name="activate_wallet"),
-        path("balance/",get_wallet_balance,name="wallet_balnce"),
+        path("property/",get_wallet_property,name="wallet_property"),
         path("credit/",credit_wallet,name="credit_wallet"),
         path("debit/",debit_wallet,name="debit_wallet")
     ])
