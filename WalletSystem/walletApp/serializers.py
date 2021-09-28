@@ -14,7 +14,7 @@ class WalletOperationSerializer(serializers.ModelSerializer):
     """
     for debit and credit wallet
     """
-    amount=serializers.FloatField(source="amount")
+    amount=serializers.FloatField(source="balance")
     class Meta:
        model=Wallet;
        fields=["phone","password","amount"]

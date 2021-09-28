@@ -14,7 +14,7 @@ debit_wallet=WalletViewset.as_view({
     "put":"debitWalletBalance"
 });
 credit_wallet=WalletViewset.as_view({
-    "put":"creditWalletInfo"
+    "put":"creditWalletBalance"
 });
 urlpatterns = format_suffix_patterns([
         path("create/",create_wallet,name="create_wallet"),

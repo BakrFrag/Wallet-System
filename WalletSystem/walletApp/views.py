@@ -1,4 +1,4 @@
-from django.http import response
+from rest_framework.exceptions import APIException
 from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response;
@@ -6,6 +6,7 @@ from rest_framework.decorators import action, authentication_classes;
 from rest_framework import status
 from rest_framework.serializers import Serializer;
 from django.contrib.auth.hashers import make_password;
+from .exceptions import CreditWalletException;
 from .models import Wallet;
 from .serializers import *;
 from .decorators import *;
@@ -97,16 +98,19 @@ class WalletViewset(viewsets.ModelViewSet):
         try:
             serializer=WalletOperationSerializer(data=request.data);
             serializer.is_valid(raise_exception=True);
-            amount=serializer.validated_data.get("amount")
-            if amount <=0:
-                raise CreditWalletException;
+            amount=serializer.validated_data.get("balance");
+            print("amount is:",amount,type(amount));
+            print("validated data:",serializer.validated_data)
+            if amount <= 0:
+                raise CreditWalletException
             phone=serializer.validated_data.get("phone");
-            instance=getWallet(phone);
-            serializer.update({
-                "balance":instance.balance + amount },instance=instance);
-            return Response({"phone":phone,"balance":serializer.data.get("balance")},status=status.HTTP_200_OK)
+            instance=getWallet(phone).get("wallet");
+            serializer.update(validated_data={"balance":instance.balance + amount },instance=instance);
+            return Response({"phone":phone,"balance":instance.balance},status=status.HTTP_200_OK)
         except ValidationError as E:
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST);
+        except CreditWalletException as E:
+            raise CreditWalletException;
         except Exception as E:
             print(sys.exc_info())
             raise InternalServerError;
