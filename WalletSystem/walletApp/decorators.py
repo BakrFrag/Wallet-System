@@ -1,4 +1,5 @@
 import re;
+import sys;
 from functools import wraps
 from django.contrib.auth.hashers import check_password;
 from .exceptions import WalletExist;
@@ -34,7 +35,11 @@ def checkPhoneNumberFormat(func):
     """
     def wrapper(*args,**kwargs):
         phone=args[1].data.get("phone");
+        print("phone",phone);
+        print("type:",type(phone));
+        print("condition is:",re.match(phone_number_pattern,phone))
         if re.match(phone_number_pattern,phone):
+            print(sys.exc_info())
             return func(*args,**kwargs);
         raise PhoneNumberValidationError;
     return wrapper;
@@ -56,10 +61,10 @@ def checkWalletPassword(func):
     """
     def wrapper(*args,**kwargs):
         phone=args[1].data.get("phone");
-        wallet=getWallet(phone);
+        wallet=getWallet(phone).get("wallet");
         print("function result:",wallet)
         parsed_password=args[1].data.get("password");
-        wallet_password=wallet.get("wallet").password;
+        wallet_password=wallet.password;
         print("parsed:",parsed_password);
         print("already:",wallet_password)
         print(check_password(parsed_password,wallet_password))
@@ -75,10 +80,12 @@ def checkWalletActivation(status):
     def checkActivation(func):
         def wrapper(*args,**kwargs):
             phone=args[1].data.get("phone");
-            wallet=getWallet(phone).wallet;
-            if wallet.is_active and status==False:
+            print("phone request is:",phone)
+            wallet=getWallet(phone).get("wallet");
+            print("wallet.phone",wallet.phone)
+            if wallet.is_active==True and status==False:
                 raise WalletAlreadyActivated;
-            elif wallet.is_acive==False and status==True:
+            elif wallet.is_active==False and status==True:
                 raise WalletNotActivated
             return func(*args,**kwargs);
         return wrapper;

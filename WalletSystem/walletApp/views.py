@@ -63,8 +63,6 @@ class WalletViewset(viewsets.ModelViewSet):
             raise InternalServerError;
     @action(methods=["GET"],detail=True)
     @checkWalletExistance(True)
-    @checkPhoneNumberFormat
-    @checkWalletPasswordFormat
     @checkWalletPassword
     @checkWalletActivation(True)
     def getWalletBalance(self,request):
@@ -72,9 +70,13 @@ class WalletViewset(viewsets.ModelViewSet):
         get wallet password
         """
         try:
+             print("1")
              serializer=CoreWalletSerializer(data=request.data);
+             print("2")
              serializer.is_valid(raise_exception=True);
-             instance=getWallet(serializer.data.get("phone")).wallet;
+             print("3");
+             instance=getWallet(serializer.data.get("phone")).get("wallet");
+             print("4")
              return Response({"phone":instance.phone,"balance":instance.balance},status=status.HTTP_200_OK);
         except ValidationError as E:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
