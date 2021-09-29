@@ -129,17 +129,23 @@ class WalletViewset(viewsets.ModelViewSet):
         try:
             serializer=WalletOperationSerializer(data=request.data);
             serializer.is_valid(raise_exception=True);
-            instance=getWallet(phone).wallet
-            amount=serializer.validated_data.get("amount")
-            if amount > instance.balace :
-                raise DebitWalletException;
             phone=serializer.validated_data.get("phone");
+            instance=getWallet(phone).get("wallet");
+            amount=serializer.validated_data.get("balance")
+            print("phone:",phone,"amount:",amount)
+            print("debit amount:",amount > instance.balance);
+            print("instance:",instance, dir(instance))
+            if amount > instance.balance :
+                raise DebitWalletException;
             
-            serializer.update({
-                "balance":instance.balance - amount },instance=instance);
-            return Response({"phone":phone,"balance":serializer.data.get("balance")},status=status.HTTP_200_OK)
+            serializer.update(validated_data={
+                "balance":instance.balance - amount },
+                instance=instance);
+            return Response({"phone":phone,"balance":instance.balance},status=status.HTTP_200_OK)
         except ValidationError as E:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        except DebitWalletException as E:
+            raise DebitWalletException;
         except Exception as E:
             print(sys.exc_info())
             raise InternalServerError;
