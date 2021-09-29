@@ -7,7 +7,6 @@ class CoreWalletSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model=Wallet;
-                 # phone
         fields=["phone","password","balance"]
         read_only_fields = ["balance"]
 class WalletOperationSerializer(serializers.ModelSerializer):

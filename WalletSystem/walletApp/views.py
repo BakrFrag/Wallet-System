@@ -30,14 +30,11 @@ class WalletViewset(viewsets.ModelViewSet):
             serializer=create_serializer(data=request.data)
             serializer.is_valid(raise_exception=True);
             password=serializer.validated_data.get("password");
-            print("parsed password is:",password);
             serializer.save(password=make_password(password));
-
             return Response({"phone":serializer.data.get("phone"),"balance":serializer.data.get("balance")},status=status.HTTP_201_CREATED);
         except ValidationError as E:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         except Exception as E:
-            print(sys.exc_info())
             raise InternalServerError;
     
     @action(methods=["POST"],detail=True)
@@ -51,7 +48,7 @@ class WalletViewset(viewsets.ModelViewSet):
         viewsets function to activate wallet
         """
         try:
-            print("parsed request data:",request.data)
+            
             serializer=CoreWalletSerializer(data=request.data);
             serializer.is_valid(raise_exception=True);
             instance=getWallet(serializer.data.get("phone")).get("wallet")
@@ -60,7 +57,7 @@ class WalletViewset(viewsets.ModelViewSet):
         except ValidationError as E:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         except Exception as E:
-            print(sys.exc_info())
+            
             raise InternalServerError;
     @action(methods=["GET"],detail=True)
     @checkWalletExistance(True)
@@ -82,7 +79,7 @@ class WalletViewset(viewsets.ModelViewSet):
         except ValidationError as E:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         except Exception as E:
-            print(sys.exc_info())
+            
             raise InternalServerError;
 
     @action(methods=["PUT"],detail=True)
@@ -99,8 +96,6 @@ class WalletViewset(viewsets.ModelViewSet):
             serializer=WalletOperationSerializer(data=request.data);
             serializer.is_valid(raise_exception=True);
             amount=serializer.validated_data.get("balance");
-            print("amount is:",amount,type(amount));
-            print("validated data:",serializer.validated_data)
             if amount <= 0:
                 raise CreditWalletException
             phone=serializer.validated_data.get("phone");
@@ -112,7 +107,7 @@ class WalletViewset(viewsets.ModelViewSet):
         except CreditWalletException as E:
             raise CreditWalletException;
         except Exception as E:
-            print(sys.exc_info())
+            
             raise InternalServerError;
     
 
@@ -132,9 +127,6 @@ class WalletViewset(viewsets.ModelViewSet):
             phone=serializer.validated_data.get("phone");
             instance=getWallet(phone).get("wallet");
             amount=serializer.validated_data.get("balance")
-            print("phone:",phone,"amount:",amount)
-            print("debit amount:",amount > instance.balance);
-            print("instance:",instance, dir(instance))
             if amount > instance.balance :
                 raise DebitWalletException;
             
@@ -147,7 +139,6 @@ class WalletViewset(viewsets.ModelViewSet):
         except DebitWalletException as E:
             raise DebitWalletException;
         except Exception as E:
-            print(sys.exc_info())
             raise InternalServerError;
     
 
